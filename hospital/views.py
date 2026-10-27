@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Doctor
+from django.contrib.auth.decorators import login_required
+from .models import Doctor, Appointment
 from .forms import AppointmentForm
 
 def home(request):
@@ -11,8 +12,13 @@ def book_appointment(request):
         form = AppointmentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')  # بعد از ثبت، برگرد به صفحه اصلی
+            return redirect('home')
     else:
         form = AppointmentForm()
     
     return render(request, 'appointment.html', {'form': form})
+
+@login_required
+def patient_dashboard(request):
+    appointments = Appointment.objects.all().order_by('-date')
+    return render(request, 'dashboard.html', {'appointments': appointments})
