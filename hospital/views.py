@@ -20,6 +20,12 @@ def book_appointment(request):
 
 @login_required
 def patient_dashboard(request):
-    # 👇 این خط تغییر کرد تا فقط نوبت‌های خود کاربر لاگین کرده را نشان دهد
     appointments = Appointment.objects.filter(patient__user=request.user).order_by('-date')
     return render(request, 'dashboard.html', {'appointments': appointments})
+
+# 👇 این تابع جدید برای پنل پزشک است 👇
+@login_required
+def doctor_dashboard(request):
+    # فقط نوبت‌هایی که پزشکشان همان کاربر لاگین‌کرده است را نشان بده
+    appointments = Appointment.objects.filter(doctor__user=request.user).order_by('-date')
+    return render(request, 'doctor_dashboard.html', {'appointments': appointments})

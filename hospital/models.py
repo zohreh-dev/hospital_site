@@ -13,6 +13,9 @@ class Department(models.Model):
 
 
 class Doctor(models.Model):
+    # 👇 این خط جدید است که پزشک را به کاربر وصل می‌کند
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, null=True, blank=True, verbose_name="کاربر")
+    
     first_name = models.CharField(max_length=50, verbose_name="نام")
     last_name = models.CharField(max_length=50, verbose_name="نام خانوادگی")
     department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="دپارتمان")
@@ -27,7 +30,7 @@ class Doctor(models.Model):
 
 
 class Patient(models.Model):
-    # 👇 این خط جدید است که بیمار را به کاربر وصل می‌کند
+    # این هم برای بیمار است که قبلا اضافه کردیم
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, null=True, blank=True, verbose_name="کاربر")
     
     first_name = models.CharField(max_length=50, verbose_name="نام")
@@ -55,4 +58,3 @@ class Appointment(models.Model):
     class Meta:
         verbose_name = "نوبت"
         verbose_name_plural = "نوبت‌ها"
-        

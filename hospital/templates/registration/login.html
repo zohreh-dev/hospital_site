@@ -3,101 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سایت بیمارستان</title>
+    <title>ورود به سایت</title>
     
-    <!-- 👇 اینجا لینک‌ها رو به سرورهای ایرانی تغییر دادیم 👇 -->
+    <!-- لینک‌های بوت‌استرپ و فونت -->
     <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css">
     <link rel="stylesheet" href="https://cdn.uitool.ir/bootstrap/5.3.0/css/bootstrap.rtl.min.css">
     
     <style>
+        /* استایل‌های پشتیبان (اگر اینترنت بوت‌استرپ رو لود نکرد، اینا کار می‌کنن) */
         body {
-            font-family: 'Vazir', sans-serif;
-            background-color: #f8f9fa;
+            font-family: Tahoma, 'Vazir', sans-serif;
+            background-color: #f0f2f5;
+            direction: rtl;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        .login-card {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .login-header {
+            background-color: #0d6efd;
             color: white;
-            padding: 100px 0;
             text-align: center;
-            border-radius: 0 0 20px 20px;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            margin: -30px -30px 20px -30px;
         }
-        /* استایل برای اینکه دکمه خروج شبیه لینک بشه */
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #dc3545; /* رنگ قرمز */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
             font-weight: bold;
-            padding: 8px 0;
-            cursor: pointer;
-            text-decoration: none;
         }
-        .logout-btn:hover {
-            color: #a71d2a;
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .btn-success {
+            background-color: #198754;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #6c757d;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- منوی بالای سایت -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">🏥 بیمارستان من</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="/">خانه</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">پزشکان</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">دپارتمان‌ها</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
-
-                    <!-- بررسی وضعیت لاگین کاربر -->
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" href="{% url 'patient_dashboard' %}">پنل کاربری</a>
-                        </li>
-                        <li class="nav-item">
-                            <form method="post" action="{% url 'logout' %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="nav-link logout-btn">خروج</button>
-                            </form>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link text-info fw-bold" href="{% url 'login' %}">ورود</a>
-                        </li>
-                    {% endif %}
-                </ul>
+    <div class="login-card shadow">
+        <div class="login-header">
+            <h4 class="mb-0">ورود به حساب کاربری 🏥</h4>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- کادرهای دستی با کلاس‌های بوت‌استرپ -->
+            <div class="form-group">
+                <label for="id_username">نام کاربری:</label>
+                <input type="text" name="username" id="id_username" class="form-control" required>
             </div>
-        </div>
-    </nav>
+            
+            <div class="form-group">
+                <label for="id_password">رمز عبور:</label>
+                <input type="password" name="password" id="id_password" class="form-control" required>
+            </div>
 
-    <!-- بخش اصلی (Hero) -->
-    <div class="hero-section">
-        <div class="container">
-            <h1 class="display-4 fw-bold">به سایت بیمارستان خوش آمدید! 🏥</h1>
-            <p class="lead mt-3">اولین صفحه اختصاصی ما با طراحی زیبا ساخته شد.</p>
-            <a href="{% url 'book_appointment' %}" class="btn btn-light btn-lg mt-3 text-primary fw-bold">رزرو نوبت</a>
-        </div>
+            <button type="submit" class="btn btn-success">ورود</button>
+            <a href="/" class="btn-link">بازگشت به خانه</a>
+        </form>
     </div>
 
-    <!-- بخش نمایش پزشکان -->
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">پزشکان ما</h2>
-        <div class="row text-center">
-            {% for doctor in doctors %}
-            <div class="col-md-4 mb-4">
-                <div class="card p-4 shadow-sm">
-                    <h3>🩺 دکتر {{ doctor.first_name }} {{ doctor.last_name }}</h3>
-                    <p><strong>تخصص:</strong> {{ doctor.specialty }}</p>
-                    <p><strong>بخش:</strong> {{ doctor.department.name }}</p>
-                    <a href="{% url 'book_appointment' %}" class="btn btn-primary mt-2">رزرو نوبت</a>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="alert alert-warning">هنوز پزشکی ثبت نشده است.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    </body>
+</body>
 </html>
