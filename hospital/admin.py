@@ -12,6 +12,7 @@ class DoctorAdmin(admin.ModelAdmin):
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'phone')
+    fields = ('user', 'first_name', 'last_name', 'phone') # 👈 این خط رو اضافه کردیم
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):

@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سایت بیمارستان</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- 👇 اینجا لینک‌ها رو به سرورهای ایرانی تغییر دادیم 👇 -->
+    <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css">
+    <link rel="stylesheet" href="https://cdn.uitool.ir/bootstrap/5.3.0/css/bootstrap.rtl.min.css">
     
     <style>
         body {
-            font-family: 'Vazirmatn', sans-serif;
+            font-family: 'Vazir', sans-serif;
             background-color: #f8f9fa;
         }
         .hero-section {
@@ -18,6 +20,19 @@
             padding: 100px 0;
             text-align: center;
             border-radius: 0 0 20px 20px;
+        }
+        /* استایل برای اینکه دکمه خروج شبیه لینک بشه */
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #dc3545; /* رنگ قرمز */
+            font-weight: bold;
+            padding: 8px 0;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            color: #a71d2a;
         }
     </style>
 </head>
@@ -33,8 +48,23 @@
                     <li class="nav-item"><a class="nav-link" href="#">پزشکان</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">دپارتمان‌ها</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
-                    <!-- این خط لینک پنل کاربری است -->
-                    <li class="nav-item"><a class="nav-link text-warning" href="{% url 'patient_dashboard' %}">پنل کاربری</a></li>
+
+                    <!-- بررسی وضعیت لاگین کاربر -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="{% url 'patient_dashboard' %}">پنل کاربری</a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link logout-btn">خروج</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link text-info fw-bold" href="{% url 'login' %}">ورود</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -69,6 +99,5 @@
             {% endfor %}
         </div>
     </div>
-
-</body>
+    </body>
 </html>

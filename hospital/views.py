@@ -20,5 +20,6 @@ def book_appointment(request):
 
 @login_required
 def patient_dashboard(request):
-    appointments = Appointment.objects.all().order_by('-date')
+    # 👇 این خط تغییر کرد تا فقط نوبت‌های خود کاربر لاگین کرده را نشان دهد
+    appointments = Appointment.objects.filter(patient__user=request.user).order_by('-date')
     return render(request, 'dashboard.html', {'appointments': appointments})
