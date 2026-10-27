@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سایت بیمارستان</title>
-    <!-- لینک به بوت‌استرپ راست‌چین -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     
@@ -27,10 +26,10 @@
     <!-- منوی بالای سایت -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">🏥 بیمارستان من</a>
+            <a class="navbar-brand" href="/">🏥 بیمارستان من</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#">خانه</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/">خانه</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">پزشکان</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">دپارتمان‌ها</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
@@ -44,31 +43,28 @@
         <div class="container">
             <h1 class="display-4 fw-bold">به سایت بیمارستان خوش آمدید! 🏥</h1>
             <p class="lead mt-3">اولین صفحه اختصاصی ما با طراحی زیبا ساخته شد.</p>
-            <a href="#" class="btn btn-light btn-lg mt-3 text-primary fw-bold">رزرو نوبت</a>
+            <a href="{% url 'book_appointment' %}" class="btn btn-light btn-lg mt-3 text-primary fw-bold">رزرو نوبت</a>
         </div>
     </div>
 
-    <!-- بخش پایین صفحه -->
+    <!-- بخش نمایش پزشکان -->
     <div class="container mt-5">
+        <h2 class="text-center mb-4">پزشکان ما</h2>
         <div class="row text-center">
+            {% for doctor in doctors %}
             <div class="col-md-4 mb-4">
                 <div class="card p-4 shadow-sm">
-                    <h3>🩺 پزشکان متخصص</h3>
-                    <p>بهترین پزشکان در خدمت شما هستند.</p>
+                    <h3>🩺 دکتر {{ doctor.first_name }} {{ doctor.last_name }}</h3>
+                    <p><strong>تخصص:</strong> {{ doctor.specialty }}</p>
+                    <p><strong>بخش:</strong> {{ doctor.department.name }}</p>
+                    <a href="{% url 'book_appointment' %}" class="btn btn-primary mt-2">رزرو نوبت</a>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card p-4 shadow-sm">
-                    <h3>⏱️ نوبت‌دهی آنلاین</h3>
-                    <p>در هر ساعت از شبانه‌روز نوبت بگیرید.</p>
-                </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="alert alert-warning">هنوز پزشکی ثبت نشده است.</p>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card p-4 shadow-sm">
-                    <h3>🏥 تجهیزات مدرن</h3>
-                    <p>بهترین امکانات درمانی برای شما.</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
