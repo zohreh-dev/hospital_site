@@ -1,103 +1,49 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سایت بیمارستان</title>
-    
-    <!-- 👇 اینجا لینک‌ها رو به سرورهای ایرانی تغییر دادیم 👇 -->
-    <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css">
-    <link rel="stylesheet" href="https://cdn.uitool.ir/bootstrap/5.3.0/css/bootstrap.rtl.min.css">
-    
-    <style>
-        body {
-            font-family: 'Vazir', sans-serif;
-            background-color: #f8f9fa;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-            border-radius: 0 0 20px 20px;
-        }
-        /* استایل برای اینکه دکمه خروج شبیه لینک بشه */
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #dc3545; /* رنگ قرمز */
-            font-weight: bold;
-            padding: 8px 0;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .logout-btn:hover {
-            color: #a71d2a;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <!-- منوی بالای سایت -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">🏥 بیمارستان من</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="/">خانه</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">پزشکان</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">دپارتمان‌ها</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
+{% block title %}پنل بیمار{% endblock %}
 
-                    <!-- بررسی وضعیت لاگین کاربر -->
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" href="{% url 'patient_dashboard' %}">پنل کاربری</a>
-                        </li>
-                        <li class="nav-item">
-                            <form method="post" action="{% url 'logout' %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="nav-link logout-btn">خروج</button>
-                            </form>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link text-info fw-bold" href="{% url 'login' %}">ورود</a>
-                        </li>
-                    {% endif %}
-                </ul>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="mb-4 text-primary fw-bold">پنل کاربری من 👤</h2>
+        
+        <div class="card shadow-lg border-0" style="border-radius: 15px;">
+            <div class="card-header bg-primary text-white py-3" style="border-radius: 15px 15px 0 0;">
+                <h4 class="mb-0 fw-bold">نوبت‌های من</h4>
             </div>
-        </div>
-    </nav>
-
-    <!-- بخش اصلی (Hero) -->
-    <div class="hero-section">
-        <div class="container">
-            <h1 class="display-4 fw-bold">به سایت بیمارستان خوش آمدید! 🏥</h1>
-            <p class="lead mt-3">اولین صفحه اختصاصی ما با طراحی زیبا ساخته شد.</p>
-            <a href="{% url 'book_appointment' %}" class="btn btn-light btn-lg mt-3 text-primary fw-bold">رزرو نوبت</a>
+            <div class="card-body p-4">
+                <table class="table table-hover text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>پزشک</th>
+                            <th>تاریخ</th>
+                            <th>ساعت</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in appointments %}
+                        <tr>
+                            <td class="fw-bold">دکتر {{ app.doctor.first_name }} {{ app.doctor.last_name }}</td>
+                            <td>{{ app.date }}</td>
+                            <td>{{ app.time }}</td>
+                            <td>
+                                {% if app.is_active %}
+                                    <span class="badge bg-success px-3 py-2">فعال</span>
+                                {% else %}
+                                    <span class="badge bg-danger px-3 py-2">لغو شده</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-muted p-4">شما هیچ نوبتی ندارید.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
-    <!-- بخش نمایش پزشکان -->
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">پزشکان ما</h2>
-        <div class="row text-center">
-            {% for doctor in doctors %}
-            <div class="col-md-4 mb-4">
-                <div class="card p-4 shadow-sm">
-                    <h3>🩺 دکتر {{ doctor.first_name }} {{ doctor.last_name }}</h3>
-                    <p><strong>تخصص:</strong> {{ doctor.specialty }}</p>
-                    <p><strong>بخش:</strong> {{ doctor.department.name }}</p>
-                    <a href="{% url 'book_appointment' %}" class="btn btn-primary mt-2">رزرو نوبت</a>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="alert alert-warning">هنوز پزشکی ثبت نشده است.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    </body>
-</html>
+</div>
+{% endblock %}
