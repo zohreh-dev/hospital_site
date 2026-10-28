@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}سایت بیمارستان{% endblock %}</title>
     
-    <!-- 👇 اتصال به فایل CSS محلی (بدون اینترنت) 👇 -->
+    <!-- اتصال به فایل CSS محلی -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.rtl.min.css' %}">
     
     <style>
@@ -29,19 +29,26 @@
             transition: color 0.3s;
         }
         .navbar-custom .nav-link:hover {
-            color: #ffca28; /* رنگ زرد */
+            color: #ffca28; /* رنگ زرد موقع هاور */
+        }
+        /* استایل برای اینکه آیکون همبرگری (سه خط) سفید بشه */
+        .navbar-toggler-icon {
+            filter: invert(1);
         }
     </style>
 </head>
 <body>
 
     <!-- منوی بالای سایت -->
-    <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4">
         <div class="container">
             <a class="navbar-brand" href="/">🏥 بیمارستان من</a>
+            
+            <!-- دکمه سه خط برای موبایل -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/">خانه</a></li>
@@ -50,6 +57,7 @@
                     <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
                 </ul>
                 
+                <!-- بخش وضعیت کاربر -->
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -80,7 +88,7 @@
         {% endblock %}
     </div>
 
-    <!-- 👇 اتصال به فایل JS محلی 👇 -->
+    <!-- اتصال به فایل JS محلی -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
