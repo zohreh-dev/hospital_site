@@ -4,7 +4,7 @@ class Department(models.Model):
     name = models.CharField(max_length=100, verbose_name="نام دپارتمان")
     description = models.TextField(blank=True, null=True, verbose_name="توضیحات")
 
-    def str(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -13,15 +13,13 @@ class Department(models.Model):
 
 
 class Doctor(models.Model):
-    # 👇 این خط جدید است که پزشک را به کاربر وصل می‌کند
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, null=True, blank=True, verbose_name="کاربر")
-    
     first_name = models.CharField(max_length=50, verbose_name="نام")
     last_name = models.CharField(max_length=50, verbose_name="نام خانوادگی")
     department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="دپارتمان")
     specialty = models.CharField(max_length=100, verbose_name="تخصص")
 
-    def str(self):
+    def __str__(self):
         return f"دکتر {self.first_name} {self.last_name}"
 
     class Meta:
@@ -30,14 +28,12 @@ class Doctor(models.Model):
 
 
 class Patient(models.Model):
-    # این هم برای بیمار است که قبلا اضافه کردیم
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, null=True, blank=True, verbose_name="کاربر")
-    
     first_name = models.CharField(max_length=50, verbose_name="نام")
     last_name = models.CharField(max_length=50, verbose_name="نام خانوادگی")
     phone = models.CharField(max_length=15, verbose_name="شماره تماس")
 
-    def str(self):
+    def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
@@ -52,7 +48,7 @@ class Appointment(models.Model):
     time = models.TimeField(verbose_name="ساعت")
     is_active = models.BooleanField(default=True, verbose_name="فعال")
 
-    def str(self):
+    def __str__(self):
         return f"نوبت {self.patient} با {self.doctor}"
 
     class Meta:
