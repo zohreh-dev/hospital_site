@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}سایت بیمارستان{% endblock %}</title>
     
-    <!-- اتصال به فایل CSS محلی -->
+    <!-- اتصال به فایل CSS محلی (بوت‌استرپ) -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.rtl.min.css' %}">
+    
+    <!-- 👇 این خط جدید برای انیمیشن‌های اسکرول (AOS) اضافه شد 👇 -->
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
     
     <style>
         body {
@@ -31,7 +34,6 @@
         .navbar-custom .nav-link:hover {
             color: #ffca28; /* رنگ زرد موقع هاور */
         }
-        /* استایل برای اینکه آیکون همبرگری (سه خط) سفید بشه */
         .navbar-toggler-icon {
             filter: invert(1);
         }
@@ -44,7 +46,6 @@
         <div class="container">
             <a class="navbar-brand" href="/">🏥 بیمارستان من</a>
             
-            <!-- دکمه سه خط برای موبایل -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -57,7 +58,6 @@
                     <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
                 </ul>
                 
-                <!-- بخش وضعیت کاربر -->
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -88,7 +88,16 @@
         {% endblock %}
     </div>
 
-    <!-- اتصال به فایل JS محلی -->
+    <!-- اتصال به فایل JS محلی (بوت‌استرپ) -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    
+    <!-- 👇 این بخش جدید برای فعال‌سازی انیمیشن‌های اسکرول اضافه شد 👇 -->
+    <script src="{% static 'js/aos.js' %}"></script>
+    <script>
+        AOS.init({
+            duration: 1000, // مدت زمان انیمیشن (۱ ثانیه)
+            once: true,     // انیمیشن فقط یک بار اجرا بشه
+        });
+    </script>
 </body>
 </html>
