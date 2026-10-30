@@ -8,21 +8,18 @@ ENV PYTHONUNBUFFERED=1
 # تعیین پوشه کاری
 WORKDIR /app
 
-# نصب پیش‌نیازهای سیستم‌عامل لینوکس (برای دیتابیس PostgreSQL)
+# نصب پیش‌نیازهای سیستم‌عامل لینوکس
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# کپی کردن و نصب پکیج‌های پایتون
+# کپی کردن فایل نیازمندی‌ها و نصب آن‌ها
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# کپی کردن کل کدها
+# کپی کردن کل کدهای پروژه
 COPY . /app/
 
-# 👇 این خط مهم‌ترین تغییره: 
-# ۱. فایل‌های استاتیک رو جمع می‌کنه
-# ۲. جدول‌های دیتابیس رو می‌سازه (migrate)
-# ۳. سرور رو با گانیکورن روی پورت ۸۰۰۰ بالا میاره
-CMD python manage.py collectstatic --no-input && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8000
+# 👇 این خط مهم‌ترین بخشه: ساخت ادمین + اجرای سرور
+CMD python manage.py collectstatic --no-input && python manage.py migrate && python create_admin.py && gunicorn config.wsgi:application --bind 0.0.0.0:8000
